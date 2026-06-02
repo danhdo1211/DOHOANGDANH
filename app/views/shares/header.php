@@ -1,3 +1,4 @@
+<?php require_once 'app/helpers/SessionHelper.php'; ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -12,25 +13,37 @@
         .navbar-brand, .nav-link { color:#fff!important; font-weight:600; }
         .nav-link:hover { opacity:.8; }
         .cart-badge { background:#e94560; color:#fff; border-radius:50px; padding:.1rem .5rem; font-size:.75rem; }
+        .nav-user { background:rgba(255,255,255,.2); border-radius:50px; padding:.3rem 1rem; font-size:.9rem; }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg px-4">
     <a class="navbar-brand" href="http://localhost:8080/DOHOANGDANH/Product"><i class="bi bi-shop me-2"></i>ShopAdmin</a>
     <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto gap-2">
+        <ul class="navbar-nav ms-auto gap-2 align-items-center">
             <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product"><i class="bi bi-box-seam me-1"></i>Sản phẩm</a></li>
             <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Category/list"><i class="bi bi-tags me-1"></i>Danh mục</a></li>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product/add"><i class="bi bi-plus-circle me-1"></i>Thêm mới</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product/cart">
+                <i class="bi bi-cart me-1"></i>Giỏ hàng
+                <?php if (!empty($_SESSION['cart'])): ?>
+                <span class="cart-badge"><?php echo array_sum(array_column($_SESSION['cart'], 'quantity')); ?></span>
+                <?php endif; ?>
+            </a></li>
+            <?php if (SessionHelper::isLoggedIn()): ?>
             <li class="nav-item">
-                <a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product/cart">
-                    <i class="bi bi-cart me-1"></i>Giỏ hàng
-                    <?php if (!empty($_SESSION['cart'])): ?>
-                    <span class="cart-badge"><?php echo array_sum(array_column($_SESSION['cart'], 'quantity')); ?></span>
-                    <?php endif; ?>
-                </a>
+                <span class="nav-link nav-user"><i class="bi bi-person-circle me-1"></i><?php echo $_SESSION['username']; ?>
+                <?php if (SessionHelper::isAdmin()): ?><span class="badge bg-warning text-dark ms-1">Admin</span><?php endif; ?>
+                </span>
             </li>
+            <?php if (SessionHelper::isAdmin()): ?>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product/add"><i class="bi bi-plus-circle me-1"></i>Thêm mới</a></li>
+            <?php endif; ?>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/account/logout"><i class="bi bi-box-arrow-right me-1"></i>Đăng xuất</a></li>
+            <?php else: ?>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/account/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/account/register"><i class="bi bi-person-plus me-1"></i>Đăng ký</a></li>
+            <?php endif; ?>
         </ul>
     </div>
 </nav>
-<div class="container mt-4">    
+<div class="container mt-4">

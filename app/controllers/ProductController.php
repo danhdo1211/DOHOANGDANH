@@ -2,6 +2,7 @@
 require_once('app/config/database.php');
 require_once('app/models/ProductModel.php');
 require_once('app/models/CategoryModel.php');
+require_once('app/helpers/SessionHelper.php');
 
 class ProductController {
     private $productModel;
@@ -21,10 +22,18 @@ class ProductController {
         else echo "Không thấy sản phẩm.";
     }
     public function add() {
+        if (!SessionHelper::isAdmin()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            exit;
+        }
         $categories = (new CategoryModel($this->db))->getCategories();
         include_once 'app/views/product/add.php';
     }
     public function save() {
+        if (!SessionHelper::isAdmin()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'] ?? '';
             $description = $_POST['description'] ?? '';
@@ -32,7 +41,11 @@ class ProductController {
             $category_id = $_POST['category_id'] ?? null;
             $image = '';
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $image = $this->uploadImage($_FILES['image']);
+                try {
+                    $image = $this->uploadImage($_FILES['image']);
+                } catch (Exception $e) {
+                    $image = '';
+                }
             }
             $result = $this->productModel->addProduct($name, $description, $price, $category_id, $image);
             if (is_array($result)) {
@@ -45,13 +58,15 @@ class ProductController {
                     $uploadedImages = [];
                     foreach ($_FILES['images']['name'] as $key => $name2) {
                         if ($_FILES['images']['error'][$key] == 0) {
-                            $file = [
-                                'name'     => $_FILES['images']['name'][$key],
-                                'tmp_name' => $_FILES['images']['tmp_name'][$key],
-                                'size'     => $_FILES['images']['size'][$key],
-                                'error'    => $_FILES['images']['error'][$key],
-                            ];
-                            $uploadedImages[] = $this->uploadImage($file);
+                            try {
+                                $file = [
+                                    'name'     => $_FILES['images']['name'][$key],
+                                    'tmp_name' => $_FILES['images']['tmp_name'][$key],
+                                    'size'     => $_FILES['images']['size'][$key],
+                                    'error'    => $_FILES['images']['error'][$key],
+                                ];
+                                $uploadedImages[] = $this->uploadImage($file);
+                            } catch (Exception $e) { }
                         }
                     }
                     if (!empty($uploadedImages)) {
@@ -63,12 +78,20 @@ class ProductController {
         }
     }
     public function edit($id) {
+        if (!SessionHelper::isAdmin()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            exit;
+        }
         $product = $this->productModel->getProductById($id);
         $categories = (new CategoryModel($this->db))->getCategories();
         if ($product) include 'app/views/product/edit.php';
         else echo "Không thấy sản phẩm.";
     }
     public function update() {
+        if (!SessionHelper::isAdmin()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
             $name = $_POST['name'];
@@ -76,7 +99,11 @@ class ProductController {
             $price = $_POST['price'];
             $category_id = $_POST['category_id'];
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $image = $this->uploadImage($_FILES['image']);
+                try {
+                    $image = $this->uploadImage($_FILES['image']);
+                } catch (Exception $e) {
+                    $image = $_POST['existing_image'];
+                }
             } else {
                 $image = $_POST['existing_image'];
             }
@@ -84,13 +111,15 @@ class ProductController {
                 $uploadedImages = [];
                 foreach ($_FILES['images']['name'] as $key => $name2) {
                     if ($_FILES['images']['error'][$key] == 0) {
-                        $file = [
-                            'name'     => $_FILES['images']['name'][$key],
-                            'tmp_name' => $_FILES['images']['tmp_name'][$key],
-                            'size'     => $_FILES['images']['size'][$key],
-                            'error'    => $_FILES['images']['error'][$key],
-                        ];
-                        $uploadedImages[] = $this->uploadImage($file);
+                        try {
+                            $file = [
+                                'name'     => $_FILES['images']['name'][$key],
+                                'tmp_name' => $_FILES['images']['tmp_name'][$key],
+                                'size'     => $_FILES['images']['size'][$key],
+                                'error'    => $_FILES['images']['error'][$key],
+                            ];
+                            $uploadedImages[] = $this->uploadImage($file);
+                        } catch (Exception $e) { }
                     }
                 }
                 if (!empty($uploadedImages)) {
@@ -103,10 +132,18 @@ class ProductController {
         }
     }
     public function delete($id) {
+        if (!SessionHelper::isAdmin()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            exit;
+        }
         if ($this->productModel->deleteProduct($id)) header('Location: http://localhost:8080/DOHOANGDANH/Product');
         else echo "Lỗi khi xóa sản phẩm.";
     }
     public function addToCart($id) {
+        if (!SessionHelper::isLoggedIn()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/account/login');
+            exit;
+        }
         $product = $this->productModel->getProductById($id);
         if (!$product) { echo "Không tìm thấy sản phẩm."; return; }
         if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
@@ -114,10 +151,10 @@ class ProductController {
             $_SESSION['cart'][$id]['quantity']++;
         } else {
             $_SESSION['cart'][$id] = [
-                'name' => $product->name,
-                'price' => $product->price,
+                'name'     => $product->name,
+                'price'    => $product->price,
                 'quantity' => 1,
-                'image' => $product->image
+                'image'    => $product->image
             ];
         }
         header('Location: http://localhost:8080/DOHOANGDANH/Product/cart');
@@ -131,9 +168,17 @@ class ProductController {
         header('Location: http://localhost:8080/DOHOANGDANH/Product/cart');
     }
     public function checkout() {
+        if (!SessionHelper::isLoggedIn()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/account/login');
+            exit;
+        }
         include 'app/views/product/checkout.php';
     }
     public function processCheckout() {
+        if (!SessionHelper::isLoggedIn()) {
+            header('Location: http://localhost:8080/DOHOANGDANH/account/login');
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $phone = $_POST['phone'];

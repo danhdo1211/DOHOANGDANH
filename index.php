@@ -1,6 +1,8 @@
 <?php
-session_start();
+require_once 'app/helpers/SessionHelper.php';
+SessionHelper::start();
 require_once 'app/models/ProductModel.php';
+require_once 'vendor/autoload.php';
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
@@ -9,6 +11,16 @@ $url = explode('/', $url);
 
 $controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controller' : 'ProductController';
 $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
+
+// Route OAuth
+if ($controllerName === 'OauthController') {
+    require_once 'app/controllers/OAuthController.php';
+    $controller = new OAuthController();
+    if (method_exists($controller, $action)) {
+        call_user_func_array([$controller, $action], array_slice($url, 2));
+    }
+    exit;
+}
 
 if (!file_exists('app/controllers/' . $controllerName . '.php')) {
     die('Controller not found');
