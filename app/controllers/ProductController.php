@@ -23,7 +23,7 @@ class ProductController {
     }
     public function add() {
         if (!SessionHelper::isAdmin()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             exit;
         }
         $categories = (new CategoryModel($this->db))->getCategories();
@@ -31,7 +31,7 @@ class ProductController {
     }
     public function save() {
         if (!SessionHelper::isAdmin()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             exit;
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -73,13 +73,13 @@ class ProductController {
                         $this->productModel->addProductImages($product_id, $uploadedImages);
                     }
                 }
-                header('Location: http://localhost:8080/DOHOANGDANH/Product');
+                header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             }
         }
     }
     public function edit($id) {
         if (!SessionHelper::isAdmin()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             exit;
         }
         $product = $this->productModel->getProductById($id);
@@ -89,7 +89,7 @@ class ProductController {
     }
     public function update() {
         if (!SessionHelper::isAdmin()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             exit;
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -127,21 +127,21 @@ class ProductController {
                 }
             }
             $edit = $this->productModel->updateProduct($id, $name, $description, $price, $category_id, $image);
-            if ($edit) header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            if ($edit) header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             else echo "Lỗi khi lưu sản phẩm.";
         }
     }
     public function delete($id) {
         if (!SessionHelper::isAdmin()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/Product');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
             exit;
         }
-        if ($this->productModel->deleteProduct($id)) header('Location: http://localhost:8080/DOHOANGDANH/Product');
+        if ($this->productModel->deleteProduct($id)) header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product');
         else echo "Lỗi khi xóa sản phẩm.";
     }
     public function addToCart($id) {
         if (!SessionHelper::isLoggedIn()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/account/login');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/account/login');
             exit;
         }
         $product = $this->productModel->getProductById($id);
@@ -157,7 +157,7 @@ class ProductController {
                 'image'    => $product->image
             ];
         }
-        header('Location: http://localhost:8080/DOHOANGDANH/Product/cart');
+        header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product/cart');
     }
     public function cart() {
         $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
@@ -165,18 +165,18 @@ class ProductController {
     }
     public function removeFromCart($id) {
         if (isset($_SESSION['cart'][$id])) unset($_SESSION['cart'][$id]);
-        header('Location: http://localhost:8080/DOHOANGDANH/Product/cart');
+        header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product/cart');
     }
     public function checkout() {
         if (!SessionHelper::isLoggedIn()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/account/login');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/account/login');
             exit;
         }
         include 'app/views/product/checkout.php';
     }
     public function processCheckout() {
         if (!SessionHelper::isLoggedIn()) {
-            header('Location: http://localhost:8080/DOHOANGDANH/account/login');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/account/login');
             exit;
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -204,7 +204,7 @@ class ProductController {
                 }
                 unset($_SESSION['cart']);
                 $this->db->commit();
-                header('Location: http://localhost:8080/DOHOANGDANH/Product/orderConfirmation');
+                header('Location: http://127.0.0.1:8888/DOHOANGDANH/Product/orderConfirmation');
             } catch (Exception $e) {
                 $this->db->rollBack();
                 echo "Lỗi: " . $e->getMessage();
@@ -227,5 +227,8 @@ class ProductController {
         if (!move_uploaded_file($file["tmp_name"], $target_file)) throw new Exception("Lỗi khi tải lên.");
         return $target_file;
     }
+    public function apiFrontend() {
+    include 'app/views/product/api_frontend.php';
+}
 }
 ?>

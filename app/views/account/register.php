@@ -10,7 +10,7 @@
                 <ul class="mb-0"><?php foreach ($errors as $err): ?><li><?php echo $err; ?></li><?php endforeach; ?></ul>
             </div>
             <?php endif; ?>
-            <form method="POST" action="http://localhost:8080/DOHOANGDANH/account/save">
+            <form method="POST" action="http://127.0.0.1:8888/DOHOANGDANH/account/save">
                 <div class="mb-3">
                     <label class="form-label text-muted small text-uppercase fw-bold">Username</label>
                     <input type="text" name="username" class="form-control rounded-3" placeholder="Nhập username..." required>
@@ -39,7 +39,7 @@
                 </button>
                 <div class="text-center mt-3">
                     <span class="text-muted small">Đã có tài khoản? </span>
-                    <a href="http://localhost:8080/DOHOANGDANH/account/login" class="text-primary fw-bold small">Đăng nhập</a>
+                    <a href="http://127.0.0.1:8888/DOHOANGDANH/account/login" class="text-primary fw-bold small">Đăng nhập</a>
                 </div>
             </form>
         </div>

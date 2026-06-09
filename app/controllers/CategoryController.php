@@ -21,7 +21,7 @@ class CategoryController {
             $name = $_POST['name'] ?? '';
             $description = $_POST['description'] ?? '';
             if ($this->categoryModel->addCategory($name, $description)) {
-                header('Location: http://localhost:8080/DOHOANGDANH/Category/list');
+                header('Location: http://127.0.0.1:8888/DOHOANGDANH/Category/list');
             } else echo "Lỗi khi thêm danh mục.";
         }
     }
@@ -36,13 +36,13 @@ class CategoryController {
             $name = $_POST['name'];
             $description = $_POST['description'];
             if ($this->categoryModel->updateCategory($id, $name, $description)) {
-                header('Location: http://localhost:8080/DOHOANGDANH/Category/list');
+                header('Location: http://127.0.0.1:8888/DOHOANGDANH/Category/list');
             } else echo "Lỗi khi cập nhật danh mục.";
         }
     }
     public function delete($id) {
         if ($this->categoryModel->deleteCategory($id)) {
-            header('Location: http://localhost:8080/DOHOANGDANH/Category/list');
+            header('Location: http://127.0.0.1:8888/DOHOANGDANH/Category/list');
         } else echo "Lỗi khi xóa danh mục.";
     }
 }

@@ -1,36 +1,77 @@
 <?php include 'app/views/shares/header.php'; ?>
-<div class="row justify-content-center"><div class="col-md-7">
-    <div class="card border-0 shadow" style="border-radius:20px;overflow:hidden">
-        <div style="background:linear-gradient(135deg,#43b89c,#2d8a72);padding:1.5rem 2rem">
-            <h4 class="text-white mb-0 fw-bold"><i class="bi bi-pencil-square me-2"></i>Sửa sản phẩm <span class="badge bg-white text-success">#<?php echo $product->id; ?></span></h4>
-        </div>
-        <div class="card-body p-4">
-            <form method="POST" action="http://localhost:8080/DOHOANGDANH/Product/update" enctype="multipart/form-data">
-                <input type="hidden" name="id" value="<?php echo $product->id; ?>">
-                <input type="hidden" name="existing_image" value="<?php echo $product->image; ?>">
-                <div class="mb-3"><label class="form-label text-muted small text-uppercase fw-bold">Tên sản phẩm</label>
-                <input type="text" name="name" class="form-control rounded-3" value="<?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?>" required></div>
-                <div class="mb-3"><label class="form-label text-muted small text-uppercase fw-bold">Mô tả</label>
-                <textarea name="description" class="form-control rounded-3" rows="3" required><?php echo htmlspecialchars($product->description, ENT_QUOTES, 'UTF-8'); ?></textarea></div>
-                <div class="mb-3"><label class="form-label text-muted small text-uppercase fw-bold">Giá (VNĐ)</label>
-                <input type="number" name="price" class="form-control rounded-3" value="<?php echo $product->price; ?>" step="1" min="1" required></div>
-                <div class="mb-3"><label class="form-label text-muted small text-uppercase fw-bold">Danh mục</label>
-                <select name="category_id" class="form-select rounded-3" required>
-                <?php foreach ($categories as $cat): ?>
-                <option value="<?php echo $cat->id; ?>" <?php echo $cat->id==$product->category_id?'selected':''; ?>><?php echo htmlspecialchars($cat->name, ENT_QUOTES, 'UTF-8'); ?></option>
-                <?php endforeach; ?></select></div>
-                <div class="mb-3"><label class="form-label text-muted small text-uppercase fw-bold">Ảnh chính</label>
-                <?php if (!empty($product->image)): ?><img src="http://localhost:8080/DOHOANGDANH/<?php echo $product->image; ?>" class="d-block mb-2 rounded-3" style="max-width:120px"><?php endif; ?>
-                <input type="file" name="image" class="form-control rounded-3" accept="image/*"></div>
-                <div class="mb-4"><label class="form-label text-muted small text-uppercase fw-bold">Ảnh phụ mới</label>
-                <input type="file" name="images[]" class="form-control rounded-3" accept="image/*" multiple>
-                <div class="text-muted small mt-1">Giữ Ctrl để chọn nhiều ảnh</div></div>
-                <div class="d-flex gap-2">
-                    <a href="http://localhost:8080/DOHOANGDANH/Product" class="btn btn-light rounded-3 py-2 flex-fill">Hủy</a>
-                    <button type="submit" class="btn btn-success rounded-3 py-2 flex-fill fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Lưu</button>
-                </div>
-            </form>
-        </div>
+<h1>Sửa sản phẩm</h1>
+<form id="edit-product-form">
+    <input type="hidden" id="id" name="id">
+    <div class="form-group">
+        <label for="name">Tên sản phẩm:</label>
+        <input type="text" id="name" name="name" class="form-control" required>
     </div>
-</div></div>
+    <div class="form-group">
+        <label for="description">Mô tả:</label>
+        <textarea id="description" name="description" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="price">Giá:</label>
+        <input type="number" id="price" name="price" class="form-control" step="0.01" required>
+    </div>
+    <div class="form-group">
+        <label for="category_id">Danh mục:</label>
+        <select id="category_id" name="category_id" class="form-control" required></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+</form>
+<a href="/DOHOANGDANH/Product/list" class="btn btn-secondary mt-2">Quay lại danh sách</a>
+
 <?php include 'app/views/shares/footer.php'; ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const productId = <?= $editId ?>;
+
+    // Load thông tin sản phẩm
+    fetch(`/DOHOANGDANH/api/product/${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('id').value = data.id;
+            document.getElementById('name').value = data.name;
+            document.getElementById('description').value = data.description;
+            document.getElementById('price').value = data.price;
+            document.getElementById('category_id').value = data.category_id;
+        });
+
+    // Load danh mục
+    fetch('/DOHOANGDANH/api/category')
+        .then(response => response.json())
+        .then(data => {
+            const categorySelect = document.getElementById('category_id');
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+        });
+
+    // Submit form
+    document.getElementById('edit-product-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const jsonData = {};
+        formData.forEach((value, key) => { jsonData[key] = value; });
+
+        fetch(`/DOHOANGDANH/api/product/${jsonData.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Product updated successfully') {
+                location.href = '/DOHOANGDANH/Product';
+            } else {
+                alert('Cập nhật sản phẩm thất bại');
+            }
+        });
+    });
+});
+</script>

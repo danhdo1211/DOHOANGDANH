@@ -8,7 +8,7 @@
         </div>
         <div class="card-body p-4">
             <p class="text-muted">Đơn hàng của bạn đã được xử lý thành công. Chúng tôi sẽ liên hệ sớm nhất!</p>
-            <a href="http://localhost:8080/DOHOANGDANH/Product" class="btn btn-primary rounded-3 px-4 fw-bold"><i class="bi bi-shop me-2"></i>Tiếp tục mua sắm</a>
+            <a href="http://127.0.0.1:8888/DOHOANGDANH/Product" class="btn btn-primary rounded-3 px-4 fw-bold"><i class="bi bi-shop me-2"></i>Tiếp tục mua sắm</a>
         </div>
     </div>
 </div></div>

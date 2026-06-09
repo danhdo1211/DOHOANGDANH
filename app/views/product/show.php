@@ -9,13 +9,13 @@ include 'app/views/shares/header.php';
         </div>
         <div class="card-body p-4">
             <?php if (!empty($product->image)): ?>
-            <img src="http://localhost:8080/DOHOANGDANH/<?php echo $product->image; ?>" class="w-100 rounded-3 mb-3" style="max-height:300px;object-fit:cover;cursor:pointer" onclick="openLightbox(this.src)">
+            <img src="http://127.0.0.1:8888/DOHOANGDANH/<?php echo $product->image; ?>" class="w-100 rounded-3 mb-3" style="max-height:300px;object-fit:cover;cursor:pointer" onclick="openLightbox(this.src)">
             <?php endif; ?>
             <?php if (!empty($productImages)): ?>
             <p class="text-muted small text-uppercase fw-bold mb-2"><i class="bi bi-images me-1"></i>Ảnh phụ</p>
             <div class="d-flex flex-wrap gap-2 mb-3">
                 <?php foreach ($productImages as $img): ?>
-                <img src="http://localhost:8080/DOHOANGDANH/<?php echo $img->image; ?>" style="width:100px;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid #e2e8f0;transition:.2s" onclick="openLightbox(this.src)" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
+                <img src="http://127.0.0.1:8888/DOHOANGDANH/<?php echo $img->image; ?>" style="width:100px;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid #e2e8f0;transition:.2s" onclick="openLightbox(this.src)" onmouseover="this.style.borderColor='#667eea'" onmouseout="this.style.borderColor='#e2e8f0'">
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
@@ -27,9 +27,9 @@ include 'app/views/shares/header.php';
                 <tr><th class="text-muted">Danh mục</th><td><span class="badge bg-light text-dark border"><?php echo htmlspecialchars($product->category_name, ENT_QUOTES, 'UTF-8'); ?></span></td></tr>
             </table>
             <div class="d-flex gap-2 mt-3">
-                <a href="http://localhost:8080/DOHOANGDANH/Product" class="btn btn-light rounded-3 flex-fill">← Quay lại</a>
-                <a href="http://localhost:8080/DOHOANGDANH/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary rounded-3 flex-fill"><i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ</a>
-                <a href="http://localhost:8080/DOHOANGDANH/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning rounded-3 flex-fill"><i class="bi bi-pencil me-1"></i>Sửa</a>
+                <a href="http://127.0.0.1:8888/DOHOANGDANH/Product" class="btn btn-light rounded-3 flex-fill">← Quay lại</a>
+                <a href="http://127.0.0.1:8888/DOHOANGDANH/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary rounded-3 flex-fill"><i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ</a>
+                <a href="http://127.0.0.1:8888/DOHOANGDANH/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning rounded-3 flex-fill"><i class="bi bi-pencil me-1"></i>Sửa</a>
             </div>
         </div>
     </div>

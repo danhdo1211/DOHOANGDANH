@@ -18,12 +18,13 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg px-4">
-    <a class="navbar-brand" href="http://localhost:8080/DOHOANGDANH/Product"><i class="bi bi-shop me-2"></i>ShopAdmin</a>
+    <a class="navbar-brand" href="http://127.0.0.1:8888/DOHOANGDANH/Product"><i class="bi bi-shop me-2"></i>ShopAdmin</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto gap-2 align-items-center">
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product"><i class="bi bi-box-seam me-1"></i>Sản phẩm</a></li>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Category/list"><i class="bi bi-tags me-1"></i>Danh mục</a></li>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product/cart">
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/Product"><i class="bi bi-box-seam me-1"></i>Sản phẩm</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/Category/list"><i class="bi bi-tags me-1"></i>Danh mục</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/Product/apiFrontend">🛠️ API Frontend</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/Product/cart">
                 <i class="bi bi-cart me-1"></i>Giỏ hàng
                 <?php if (!empty($_SESSION['cart'])): ?>
                 <span class="cart-badge"><?php echo array_sum(array_column($_SESSION['cart'], 'quantity')); ?></span>
@@ -36,14 +37,28 @@
                 </span>
             </li>
             <?php if (SessionHelper::isAdmin()): ?>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/Product/add"><i class="bi bi-plus-circle me-1"></i>Thêm mới</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/Product/add"><i class="bi bi-plus-circle me-1"></i>Thêm mới</a></li>
             <?php endif; ?>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/account/logout"><i class="bi bi-box-arrow-right me-1"></i>Đăng xuất</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/account/logout"><i class="bi bi-box-arrow-right me-1"></i>Đăng xuất</a></li>
             <?php else: ?>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/account/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a></li>
-            <li class="nav-item"><a class="nav-link" href="http://localhost:8080/DOHOANGDANH/account/register"><i class="bi bi-person-plus me-1"></i>Đăng ký</a></li>
+            <li class="nav-item" id="nav-login"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/account/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8888/DOHOANGDANH/account/register"><i class="bi bi-person-plus me-1"></i>Đăng ký</a></li>
             <?php endif; ?>
+            <li class="nav-item" id="nav-logout" style="display:none;"><a class="nav-link" href="#" onclick="jwtLogout()"><i class="bi bi-box-arrow-right me-1"></i>Đăng xuất JWT</a></li>
         </ul>
     </div>
 </nav>
 <div class="container mt-4">
+
+<script>
+function jwtLogout() {
+    localStorage.removeItem('jwtToken');
+    location.href = '/DOHOANGDANH/account/login';
+}
+document.addEventListener("DOMContentLoaded", function() {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        document.getElementById('nav-logout').style.display = 'block';
+    }
+});
+</script>

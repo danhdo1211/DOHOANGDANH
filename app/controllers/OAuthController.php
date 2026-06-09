@@ -16,14 +16,14 @@ class OAuthController {
   $this->githubProvider = new \League\OAuth2\Client\Provider\Github([
     'clientId'     => 'Ov23lioR5rejSOuPUzk0',
     'clientSecret' => 'de8fe3495d465881621ed174c7ec367c05507cc3',
-    'redirectUri'  => 'http://localhost:8080/DOHOANGDANH/oauth/githubCallback',
+    'redirectUri'  => 'http://127.0.0.1:8888/DOHOANGDANH/oauth/githubCallback',
     'scopes'       => ['read:user'],
 ]);
 
        $this->facebookProvider = new \League\OAuth2\Client\Provider\Facebook([
     'clientId'        => '849154711581259',
     'clientSecret'    => 'fa1f0586f9b8324734dd78c6c52ed062',
-    'redirectUri'     => 'http://localhost:8080/DOHOANGDANH/oauth/facebookCallback',
+    'redirectUri'     => 'http://127.0.0.1:8888/DOHOANGDANH/oauth/facebookCallback',
     'graphApiVersion' => 'v18.0',
     'scope'           => ['public_profile'],
 ]);

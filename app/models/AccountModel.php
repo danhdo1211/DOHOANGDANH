@@ -29,5 +29,6 @@ class AccountModel {
         $stmt->bindParam(":role", $role);
         return $stmt->execute();
     }
+    
 }
 ?>

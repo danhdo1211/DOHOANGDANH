@@ -8,7 +8,7 @@
                 <?php $total = 0; foreach ($cart as $id => $item): $subtotal = $item['price'] * $item['quantity']; $total += $subtotal; ?>
                 <div class="d-flex align-items-center gap-3 p-3 border-bottom">
                     <?php if (!empty($item['image'])): ?>
-                    <img src="http://localhost:8080/DOHOANGDANH/<?php echo $item['image']; ?>" style="width:80px;height:80px;object-fit:cover;border-radius:10px">
+                    <img src="http://127.0.0.1:8888/DOHOANGDANH/<?php echo $item['image']; ?>" style="width:80px;height:80px;object-fit:cover;border-radius:10px">
                     <?php else: ?>
                     <div style="width:80px;height:80px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🛍️</div>
                     <?php endif; ?>
@@ -17,7 +17,7 @@
                         <p class="text-muted small mb-1"><?php echo number_format($item['price'], 0, ',', '.'); ?> VNĐ x <?php echo $item['quantity']; ?></p>
                         <p class="fw-bold mb-0" style="color:#667eea"><?php echo number_format($subtotal, 0, ',', '.'); ?> VNĐ</p>
                     </div>
-                    <a href="http://localhost:8080/DOHOANGDANH/Product/removeFromCart/<?php echo $id; ?>" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                    <a href="http://127.0.0.1:8888/DOHOANGDANH/Product/removeFromCart/<?php echo $id; ?>" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -36,8 +36,8 @@
                     <span class="fw-bold">Tổng cộng</span>
                     <span class="fw-bold fs-5" style="color:#667eea"><?php echo number_format($total, 0, ',', '.'); ?> VNĐ</span>
                 </div>
-                <a href="http://localhost:8080/DOHOANGDANH/Product/checkout" class="btn btn-primary w-100 rounded-3 fw-bold"><i class="bi bi-credit-card me-2"></i>Thanh toán</a>
-                <a href="http://localhost:8080/DOHOANGDANH/Product" class="btn btn-light w-100 rounded-3 mt-2">Tiếp tục mua sắm</a>
+                <a href="http://127.0.0.1:8888/DOHOANGDANH/Product/checkout" class="btn btn-primary w-100 rounded-3 fw-bold"><i class="bi bi-credit-card me-2"></i>Thanh toán</a>
+                <a href="http://127.0.0.1:8888/DOHOANGDANH/Product" class="btn btn-light w-100 rounded-3 mt-2">Tiếp tục mua sắm</a>
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@
 <div class="text-center py-5 bg-white rounded-4 shadow-sm">
     <div style="font-size:4rem">🛒</div>
     <h5 class="mt-3 text-muted">Giỏ hàng trống!</h5>
-    <a href="http://localhost:8080/DOHOANGDANH/Product" class="btn btn-primary rounded-pill mt-2">Mua sắm ngay</a>
+    <a href="http://127.0.0.1:8888/DOHOANGDANH/Product" class="btn btn-primary rounded-pill mt-2">Mua sắm ngay</a>
 </div>
 <?php endif; ?>
 <?php include 'app/views/shares/footer.php'; ?>

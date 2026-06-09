@@ -35,7 +35,7 @@ $qr_url      = "https://img.vietqr.io/image/{$bank_id}-{$account_no}-compact2.pn
                 </h4>
             </div>
             <div class="card-body p-4">
-                <form method="POST" action="http://localhost:8080/DOHOANGDANH/Product/processCheckout" id="checkoutForm">
+                <form method="POST" action="http://127.0.0.1:8888/DOHOANGDANH/Product/processCheckout" id="checkoutForm">
                     <div class="mb-3">
                         <label class="form-label text-muted small text-uppercase fw-bold">Họ tên</label>
                         <input type="text" name="name" class="form-control rounded-3" placeholder="Nhập họ tên..." required>
@@ -76,7 +76,7 @@ $qr_url      = "https://img.vietqr.io/image/{$bank_id}-{$account_no}-compact2.pn
                     <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 fw-bold">
                         <i class="bi bi-check-circle-fill me-2"></i>Xác nhận đặt hàng
                     </button>
-                    <a href="http://localhost:8080/DOHOANGDANH/Product/cart" 
+                    <a href="http://127.0.0.1:8888/DOHOANGDANH/Product/cart" 
                        class="btn btn-light w-100 rounded-3 py-2 mt-2">← Quay lại giỏ hàng</a>
                 </form>
             </div>
